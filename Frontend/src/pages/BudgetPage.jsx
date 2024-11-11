@@ -168,7 +168,7 @@ const BudgetPage = () => {
                             required
                         />
                         <button type="submit">Add Budget</button>
-                    </form>
+                    </form> 
 
                     {/* Inline CSS */}
                     <style jsx>{`

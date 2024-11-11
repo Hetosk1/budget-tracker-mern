@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Logout from './pages/Logout';
 import Register from './pages/Register';
 import Landing from './pages/Landing';
+import About from './pages/About';
 
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
@@ -22,7 +23,6 @@ function parseJwt (token) {
 function App() {
     const navigate = useNavigate();
 
-    // Check if the user is logged in
     const isLoggedIn = () => !!localStorage.getItem('bud-token');
 
     // Sign out the user
@@ -53,7 +53,15 @@ function App() {
                             Sign Out
                         </button>
                     </div>
-                ) : null}
+                ) : (
+                  <div className='about-us'
+                    onClick={(e) => {
+                      navigate('/about')
+                    }}
+                  >
+                    About Us
+                  </div>
+                )}
             </header>
 
             <main>
@@ -64,6 +72,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="/dashboard" element={<BudgetPage />} />
                     <Route path="/budget" element={<BudgetRecords />} />
+                    <Route path="/about" element={<About/>}/>
                     <Route path="*" element={
                         <div className='route-not-found'>
                             Page not found
@@ -74,6 +83,10 @@ function App() {
 
             {/* Inline CSS */}
             <style jsx>{`
+                .about-us{
+                  cursor: pointer;
+                }
+
                 body {
                     margin: 0;
                     font-family: Arial, sans-serif;
@@ -92,7 +105,7 @@ function App() {
 
                 .title {
                     font-size: 24px; /* Larger font size for the title */
-                    color: #e63946; /* Bright red color for title */
+                    color: #007bff; /* B007bffright red color for title */
                     cursor: pointer; /* Pointer cursor on hover */
                 }
 

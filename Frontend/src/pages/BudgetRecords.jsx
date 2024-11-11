@@ -1,3 +1,6 @@
+import {useLocation, useNavigate} from 'react-router-dom'
+import {useState, useEffect} from 'react'
+
 const BudgetRecords = (props) => {
     const location = useLocation();
     const budgetID = location.state?._id; // Get budget ID from state
@@ -85,14 +88,12 @@ const BudgetRecords = (props) => {
                     <input 
                         type="text" 
                         value={expenseName} 
-                        onChange={(e) => setExpenseName(e.target.value)} 
                         placeholder="Expense Name"
                         required
                     />
                     <input 
                         type="number" 
                         value={expenseAmount} 
-                        onChange={(e) => setExpenseAmount(e.target.value)} 
                         placeholder="Expense Amount"
                         required
                     />
@@ -105,3 +106,5 @@ const BudgetRecords = (props) => {
         </>
     );
 };
+
+export default BudgetRecords;

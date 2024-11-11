@@ -10,7 +10,7 @@ const Landing = () => {
 
     return (
         <div className="container">
-            <h1>Welcome to Our App</h1>
+            <h1>Welcome to Budget Tracker</h1>
             {!isLoggedIn() 
                 ? 
                 <>
