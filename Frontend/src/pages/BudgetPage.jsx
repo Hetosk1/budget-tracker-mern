@@ -15,6 +15,14 @@ const BudgetPage = () => {
     const [budget, setBudget] = useState(0);
     const [newBudgetName, setNewBudgetName] = useState("");
     const [newBudgetAmount, setNewBudgetAmount] = useState(0);
+    const [expenseId, setExpenseId] = useState('');
+    const [expenseTableData, setExpenseTableData] = useState([]);
+    const [expenseTableDataFiltered, setExpenseTableDataFiltered] = useState([]);
+    const [expenseName, setExpenseName] = useState("");
+    const [expenseAmount, setExpenseAmount] = useState(0);
+    const [selectedBudgetLimit, setSelectedBudgetLimit] = useState(0);
+    const [spentSelectedBudgetLimit, setSpentSelectedBudgetLimit] = useState(0);
+
     const navigate = useNavigate();
 
     const fetchData = async () => {
@@ -32,15 +40,38 @@ const BudgetPage = () => {
         .catch(error => {
             console.log(error);
         });
+
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
+    const fetchExpenseData = async () => {
+        console.log('le maro full hour')
+        await axios.get('http://localhost:3000/expense', {
+            params: {
+                budgetId: expenseId
+            }
+        })
+        .then(response => {
+            console.log(response)
+            setExpenseTableDataFiltered(response.data.expenses)
+        })
+        .catch(error => console.log(error));
+    }
+
+    useEffect(() => {
+        fetchExpenseData();
+    }, [expenseId]) ;
+
     const amountPlanned = () => {
         return tableData.reduce((total, data) => total + data.budgetLimit, 0);
     };
+
+    const moneySpent = () => {
+        return expenseTableDataFiltered.reduce((total, data) => total + data.expenseAmount, 0);
+    }
 
     const handleBudgetAmountChange = async (e) => {
         e.preventDefault();
@@ -67,6 +98,11 @@ const BudgetPage = () => {
     };
 
     const handleBudgetAdd = async (e) => {
+        e.preventDefault();
+        if(newBudgetAmount > (budget - amountPlanned())){
+            toast.error('pikina aukat ma rene ')
+            return 
+        }
         e.preventDefault();
         await axios.post('http://localhost:3000/budget', {
             budgetName: newBudgetName,
@@ -103,8 +139,36 @@ const BudgetPage = () => {
        });
     };
 
-    const redirectToPage = (data) => {
-        navigate('/budget', { state: { _id: data._id } });
+    const AddExpense = async () => {
+
+        if(expenseAmount > (tableData.map(data => {if(data._id == expenseId) return data.budgetLimit})) - (moneySpent())){
+            toast.error('expense limit reached');
+            return ;
+        }
+
+        await axios.post('http://localhost:3000/expense/', {
+            expenseName: expenseName,
+            expenseAmount: expenseAmount,
+            budgetId: expenseId
+        })
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
+        console.log(expenseAmount);
+        console.log(expenseName);
+        fetchExpenseData();
+    }
+
+    const removeExpense = async (expenseId) => {
+        await axios.delete('http://localhost:3000/expense/', {
+            expenseId: expenseId
+        })
+        .then(response => {
+            console.log(response);
+            fetchExpenseData();
+        })
+        .catch(error => {
+            console.log(error);
+        })
     };
 
     return (
@@ -125,8 +189,12 @@ const BudgetPage = () => {
                         </form>
                     </div>
 
-                    <div className="budget-planned">
+                    <div className="">
                         Budget Planned: {amountPlanned()}
+                    </div>
+
+                    <div className=''>
+                        Budget Left: {budget - amountPlanned()}
                     </div>
 
                     <div className="table-container">
@@ -137,7 +205,7 @@ const BudgetPage = () => {
                                     <th>Budget Limit</th>
                                     <th>Budget Spent</th>
                                     <th>Delete</th>
-                                    <th>View</th>
+                               
                                 </tr>
                             </thead>
                             <tbody>
@@ -147,7 +215,6 @@ const BudgetPage = () => {
                                         <td>{data.budgetLimit}</td>
                                         <td>{data.budgetSpent}</td>
                                         <td><button onClick={() => removeBudget(data._id)}>&#9746;</button></td>
-                                        <td><button onClick={() => redirectToPage(data)}>&#x1F58A;</button></td>
                                     </tr>
                                 ))} 
                             </tbody>
@@ -170,8 +237,85 @@ const BudgetPage = () => {
                         <button type="submit">Add Budget</button>
                     </form> 
 
+                    <hr />
+
+                    <div>
+                        <h2>Add a Expense</h2>
+                        {/* <form action="">
+                            <select onChange={(e) => setExpenseId(e.target.value)} value={expenseId} name="" id="">
+                                <option value="">---</option>
+                                {tableData.map(data => (
+                                    <option value={data._id}>{data.budgetName}</option>
+                                ))}
+                            </select>
+                        </form> */}
+
+                        <form action="" onSubmit={(e) => {
+                            e.preventDefault();
+                            AddExpense()
+                        }}>
+                            <select onChange={(e) => setExpenseId(e.target.value)} value={expenseId} name="" id="">
+                                <option value="">---</option>
+                                {tableData.map(data => (
+                                    <option value={data._id}>{data.budgetName}</option>
+                                ))}
+                            </select>
+
+                            <input type="text" value={expenseName} onChange={(e) => setExpenseName(e.target.value)} name="" id="" placeholder="Expense Name"/>
+                            <input type="number" value={expenseAmount} onChange={(e) => setExpenseAmount(e.target.value)} name="" id="" placeholder="Expense Amount"/>
+                            {expenseTableDataFiltered ? <button>Add Expense</button> : <button disabled>Add Expense</button>}
+                        </form>
+
+                        {expenseTableDataFiltered ? 
+
+                            <div>
+                                <div>Money Spent : {tableData.map(data => {
+                                    if(data._id == expenseId) return data.budgetLimit
+                                })}</div> <div>Money Left : { (tableData.map(data =>{if(data._id == expenseId) return data.budgetLimit})) - moneySpent()}</div>
+                                <br />
+                                <table className='budget-table'>
+                                <thead>
+                                    <tr>
+                                        <th>Expense Name</th>
+                                        <th>Expense Amount</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {expenseTableDataFiltered.map(data => (
+                                        <tr>
+                                            <td>{data.expenseName}</td>
+                                            <td>{data.expenseAmount}</td>
+                                            <td><button onClick={(e) => {
+                                                e.preventDefault();
+                                                console.log(data._id)
+                                                removeExpense(data._id)
+                                            }}>&#9746;</button></td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                                </table>
+                            </div>
+
+                            : 
+
+                            <div>Lemaro</div>
+
+                        }
+
+
+                    </div>
+
+
+
                     {/* Inline CSS */}
                     <style jsx>{`
+
+                        h2{
+                            font-size: 24px;
+                            font-weight: bold;
+                        }
+
                         .header {
                             font-size: 24px;
                             font-weight: bold;
@@ -182,7 +326,7 @@ const BudgetPage = () => {
                             margin-bottom: 20px;
                         }
 
-                        input[type="number"], input[type="text"] {
+                        input[type="number"], input[type="text"], select{
                             padding: 10px;
                             margin-right: 10px;
                             border-radius: 5px;
@@ -210,6 +354,7 @@ const BudgetPage = () => {
                         .budget-table {
                             width: 100%;
                             border-collapse: collapse;
+                            margin-bottom: 20px;
                         }
 
                         .budget-table th, .budget-table td {
