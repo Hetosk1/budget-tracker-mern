@@ -141,9 +141,19 @@ const BudgetPage = () => {
 
     const AddExpense = async () => {
 
-        if(expenseAmount > (tableData.map(data => {if(data._id == expenseId) return data.budgetLimit})) - (moneySpent())){
+        let budget = 0;
+        tableData.map(data => {
+            if(data._id == expenseId){
+                budget = data.budgetLimit;
+            }
+        })
+
+
+        if(expenseAmount > budget - moneySpent()){
             toast.error('expense limit reached');
             return ;
+        } else {
+            console.warn('lodo maro')
         }
 
         await axios.post('http://localhost:3000/expense/', {
@@ -269,9 +279,9 @@ const BudgetPage = () => {
                         {expenseTableDataFiltered ? 
 
                             <div>
-                                <div>Money Spent : {tableData.map(data => {
+                                <div>Expense Limit : {tableData.map(data => {
                                     if(data._id == expenseId) return data.budgetLimit
-                                })}</div> <div>Money Left : { (tableData.map(data =>{if(data._id == expenseId) return data.budgetLimit})) - moneySpent()}</div>
+                                })}</div> <div>Money spent : { moneySpent()}</div>
                                 <br />
                                 <table className='budget-table'>
                                 <thead>
