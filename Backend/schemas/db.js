@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const MONGOOSE_URI = "mongodb://mongo:27017/budgetTracker";
+const MONGOOSE_URI = "mongodb://127.0.0.1:27017/";
 
 const initDatabase = async () => {
 

@@ -104,7 +104,7 @@ const BudgetPage = () => {
             return 
         }
         e.preventDefault();
-        await axios.post('http://localhost:3000/budget', {
+        await axios.post('http://10.24.88.85/budget', {
             budgetName: newBudgetName,
             budgetLimit: newBudgetAmount
         }, {
@@ -123,7 +123,7 @@ const BudgetPage = () => {
     };
 
     const removeBudget = async (_id) => {
-        await axios.delete('http://localhost:3000/budget', {
+        await axios.delete('http://10.24.88.85:3000/budget', {
             data: { _id },
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}`,
@@ -156,7 +156,7 @@ const BudgetPage = () => {
             console.warn('lodo maro')
         }
 
-        await axios.post('http://localhost:3000/expense/', {
+        await axios.post('http://10.24.88.85/:3000/expense/', {
             expenseName: expenseName,
             expenseAmount: expenseAmount,
             budgetId: expenseId
@@ -169,7 +169,7 @@ const BudgetPage = () => {
     }
 
     const removeExpense = async (expenseId) => {
-        await axios.delete('http://localhost:3000/expense/', {
+        await axios.delete('http://10.24.88.85:3000/expense/', {
             expenseId: expenseId
         })
         .then(response => {
