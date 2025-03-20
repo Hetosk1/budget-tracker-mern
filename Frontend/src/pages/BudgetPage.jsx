@@ -4,8 +4,9 @@ import { Chart as ChartJS, ArcElement } from 'chart.js';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {Backend} from '../../backend';
 
-ChartJS.register(ArcElement);
+const backend = import.meta.env.VITE_BACKEND_URL; 
 
 const BudgetPage = () => {
     const isLoggedIn = () => !!localStorage.getItem('bud-token');
@@ -26,7 +27,7 @@ const BudgetPage = () => {
     const navigate = useNavigate();
 
     const fetchData = async () => {
-        await axios.get('http://localhost:3000/budget', {
+        await axios.get(`${backend}/budget`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}` 
             },
@@ -49,7 +50,7 @@ const BudgetPage = () => {
 
     const fetchExpenseData = async () => {
         console.log('le maro full hour')
-        await axios.get('http://localhost:3000/expense', {
+        await axios.get(`${backend}/expense`, {
             params: {
                 budgetId: expenseId
             }
@@ -75,7 +76,7 @@ const BudgetPage = () => {
 
     const handleBudgetAmountChange = async (e) => {
         e.preventDefault();
-        await axios.put('http://localhost:3000/user/', {
+        await axios.put(`${backend}/user/`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}`,
                 'Content-Type': 'application/json'
@@ -104,7 +105,7 @@ const BudgetPage = () => {
             return 
         }
         e.preventDefault();
-        await axios.post('http://10.24.88.85/budget', {
+        await axios.post(`${backend}/budget`, {
             budgetName: newBudgetName,
             budgetLimit: newBudgetAmount
         }, {
@@ -123,7 +124,7 @@ const BudgetPage = () => {
     };
 
     const removeBudget = async (_id) => {
-        await axios.delete('http://10.24.88.85:3000/budget', {
+        await axios.delete(`${backend}/budget`, {
             data: { _id },
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}`,
@@ -156,7 +157,7 @@ const BudgetPage = () => {
             console.warn('lodo maro')
         }
 
-        await axios.post('http://10.24.88.85/:3000/expense/', {
+        await axios.post(`${backend}/expense/`, {
             expenseName: expenseName,
             expenseAmount: expenseAmount,
             budgetId: expenseId
@@ -169,7 +170,7 @@ const BudgetPage = () => {
     }
 
     const removeExpense = async (expenseId) => {
-        await axios.delete('http://10.24.88.85:3000/expense/', {
+        await axios.delete(`${backend}/expense/`, {
             expenseId: expenseId
         })
         .then(response => {

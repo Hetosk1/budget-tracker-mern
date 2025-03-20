@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import {Backend} from '../../backend';
+
+
+const backend = import.meta.env.VITE_BACKEND_URL; 
 
 const Login = () => {
     const isLoggedin = () => {
@@ -18,7 +22,7 @@ const Login = () => {
         console.log(`Data Recorded:\nEmail: ${email}\nPassword: ${password}`);
 
         try {
-            const response = await axios.post('http://localhost:3000/user/signin', {
+            const response = await axios.post(`${backend}/user/signin`, {
                 email: email,
                 password: password 
             });

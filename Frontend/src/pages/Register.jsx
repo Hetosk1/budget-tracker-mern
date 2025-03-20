@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";
+import { Backend } from '../../backend';
+
+
+const backend = import.meta.env.VITE_BACKEND_URL; 
 
 const Register = () => {
     const isLoggedIn = () => {
@@ -17,9 +21,10 @@ const Register = () => {
         e.preventDefault();
         console.log('Button pressed detected');
         console.log(`Data Recorded:\nUsername: ${username}\nEmail: ${email}\nPassword: ${password}`);
-
+         
+        console.log(Backend)
         try {
-            const response = await axios.post('http://localhost:3000/user/signup', {
+            const response = await axios.post(`${backend}/user/signup`, {
                 name: username,
                 email: email,
                 password: password

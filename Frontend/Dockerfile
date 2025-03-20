@@ -1,8 +1,10 @@
-FROM node:20.18.0
-WORKDIR /usr/src/app
+FROM node:18-alpine as build
+WORKDIR /app
 COPY package*.json ./
-RUN npm install 
+RUN npm install
 COPY . .
-EXPOSE 5173
-CMD ["npm", "run", "dev"]
-
+RUN npm run build
+FROM httpd:alpine
+COPY --from=build /app/dist /usr/local/apache2/htdocs/
+EXPOSE 80
+CMD ["httpd-foreground"]
