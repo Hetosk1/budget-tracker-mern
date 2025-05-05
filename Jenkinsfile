@@ -44,7 +44,7 @@ pipeline {
                 def pipelineStatus = currentBuild.result ?: "UNKNOWN" 
                 emailext(
                     subject: "${jobName}d - Build {$buildNumber} - ${pipelineStats}",
-                    body: "<html><body>${jobName}d - Build {$buildNumber} - ${pipelineStats}</body><html>"
+                    body: "<html><body>${jobName}d - Build {$buildNumber} - ${pipelineStats}</body><html>",
                     to: "hetekta2709@gmail.com",
                     from: "sintheteisnotvalid@gmail.com",
                     replyTo: "sintheteisnotvalid@gmail.com",
