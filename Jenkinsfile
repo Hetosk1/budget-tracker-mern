@@ -38,6 +38,19 @@ pipeline {
     post {
         success {
             echo 'Deployment successful!'
+            script {
+                def jobName = env.JOB_NAME
+                def buildNumber = env.BUILD_NUMBER
+                def pipelineStatus = currentBuild.result ?: "UNKNOWN" 
+                emailext(
+                    subject: "${jobName}d - Build {$buildNumber} - ${pipelineStats}",
+                    body: "<html><body>${jobName}d - Build {$buildNumber} - ${pipelineStats}</body><html>"
+                    to: "hetekta2709@gmail.com",
+                    from: "sintheteisnotvalid@gmail.com",
+                    replyTo: "sintheteisnotvalid@gmail.com",
+                    mimeType: "text/html"
+                )
+            }
         }
         failure {
             echo 'Deployment failed!'
