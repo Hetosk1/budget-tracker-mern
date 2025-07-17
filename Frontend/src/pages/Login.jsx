@@ -3,6 +3,8 @@ import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
+const api = import.meta.env.VITE_API_URL;
+
 const Login = () => {
     const isLoggedin = () => {
         return localStorage.getItem('bud-token') ? true : false;
@@ -18,7 +20,7 @@ const Login = () => {
         console.log(`Data Recorded:\nEmail: ${email}\nPassword: ${password}`);
 
         try {
-            const response = await axios.post('http://backend:3000/user/signin', {
+            const response = await axios.post('http://api:3000/user/signin', {
                 email: email,
                 password: password 
             });

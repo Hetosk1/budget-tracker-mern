@@ -1,6 +1,8 @@
 import {useLocation, useNavigate} from 'react-router-dom'
 import {useState, useEffect} from 'react'
 
+const api = import.meta.env.VITE_API_URL;
+
 const BudgetRecords = (props) => {
     const location = useLocation();
     const budgetID = location.state?._id; // Get budget ID from state
@@ -30,7 +32,7 @@ const BudgetRecords = (props) => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://backend:3000/expense', {
+            const response = await axios.get('http://api:3000/expense', {
                 params: { budgetId: budgetID }
             });
             setData(response.data || []); // Ensure data is an array
@@ -48,7 +50,7 @@ const BudgetRecords = (props) => {
         }
 
         try {
-            await axios.post('http://backend:3000/expense', {
+            await axios.post('http://api:3000/expense', {
                 expense_name: expenseName,
                 expense_price: expenseAmount,
                 budgetId: budgetID // Include budget ID when adding expense
