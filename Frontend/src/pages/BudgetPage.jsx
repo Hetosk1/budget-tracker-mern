@@ -26,7 +26,7 @@ const BudgetPage = () => {
     const navigate = useNavigate();
 
     const fetchData = async () => {
-        await axios.get('http://localhost:3000/budget', {
+        await axios.get('http://backend:3000/budget', {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}` 
             },
@@ -49,7 +49,7 @@ const BudgetPage = () => {
 
     const fetchExpenseData = async () => {
         console.log('le maro full hour')
-        await axios.get('http://localhost:3000/expense', {
+        await axios.get('http://backend:3000/expense', {
             params: {
                 budgetId: expenseId
             }
@@ -75,7 +75,7 @@ const BudgetPage = () => {
 
     const handleBudgetAmountChange = async (e) => {
         e.preventDefault();
-        await axios.put('http://localhost:3000/user/', {
+        await axios.put('http://backend:3000/user/', {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}`,
                 'Content-Type': 'application/json'
@@ -104,7 +104,7 @@ const BudgetPage = () => {
             return 
         }
         e.preventDefault();
-        await axios.post('http://localhost:3000/budget', {
+        await axios.post('http://backend:3000/budget', {
             budgetName: newBudgetName,
             budgetLimit: newBudgetAmount
         }, {
@@ -123,7 +123,7 @@ const BudgetPage = () => {
     };
 
     const removeBudget = async (_id) => {
-        await axios.delete('http://localhost:3000/budget', {
+        await axios.delete('http://backend:3000/budget', {
             data: { _id },
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}`,
@@ -156,7 +156,7 @@ const BudgetPage = () => {
             console.warn('lodo maro')
         }
 
-        await axios.post('http://localhost:3000/expense/', {
+        await axios.post('http://backend:3000/expense/', {
             expenseName: expenseName,
             expenseAmount: expenseAmount,
             budgetId: expenseId
@@ -169,7 +169,7 @@ const BudgetPage = () => {
     }
 
     const removeExpense = async (expenseId) => {
-        await axios.delete('http://localhost:3000/expense/', {
+        await axios.delete('http://backend:3000/expense/', {
             expenseId: expenseId
         })
         .then(response => {
