@@ -30,7 +30,7 @@ const BudgetRecords = (props) => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/expense', {
+            const response = await axios.get('http://backend:3000/expense', {
                 params: { budgetId: budgetID }
             });
             setData(response.data || []); // Ensure data is an array
@@ -48,7 +48,7 @@ const BudgetRecords = (props) => {
         }
 
         try {
-            await axios.post('http://localhost:3000/expense', {
+            await axios.post('http://backend:3000/expense', {
                 expense_name: expenseName,
                 expense_price: expenseAmount,
                 budgetId: budgetID // Include budget ID when adding expense
