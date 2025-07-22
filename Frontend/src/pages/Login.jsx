@@ -20,7 +20,7 @@ const Login = () => {
         console.log(`Data Recorded:\nEmail: ${email}\nPassword: ${password}`);
 
         try {
-            const response = await axios.post('http://api:3000/user/signin', {
+            const response = await axios.post(`${api}:3000/user/signin`, {
                 email: email,
                 password: password 
             });

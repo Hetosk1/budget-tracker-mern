@@ -27,7 +27,7 @@ const BudgetPage = () => {
     const navigate = useNavigate();
 
     const fetchData = async () => {
-        await axios.get('http://api:3000/budget', {
+        await axios.get(`${api}:3000/budget`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}` 
             },
@@ -50,7 +50,7 @@ const BudgetPage = () => {
 
     const fetchExpenseData = async () => {
         console.log('le maro full hour')
-        await axios.get('http://api:3000/expense', {
+        await axios.get(`${api}:3000/expense`, {
             params: {
                 budgetId: expenseId
             }
@@ -76,7 +76,7 @@ const BudgetPage = () => {
 
     const handleBudgetAmountChange = async (e) => {
         e.preventDefault();
-        await axios.put('http://api:3000/user/', {
+        await axios.put(`${api}:3000/user/`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}`,
                 'Content-Type': 'application/json'
@@ -105,7 +105,7 @@ const BudgetPage = () => {
             return 
         }
         e.preventDefault();
-        await axios.post('http://api:3000/budget', {
+        await axios.post(`${api}:3000/budget`, {
             budgetName: newBudgetName,
             budgetLimit: newBudgetAmount
         }, {
@@ -124,7 +124,7 @@ const BudgetPage = () => {
     };
 
     const removeBudget = async (_id) => {
-        await axios.delete('http://api:3000/budget', {
+        await axios.delete(`${api}:3000/budget`, {
             data: { _id },
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('bud-token')}`,
@@ -157,7 +157,7 @@ const BudgetPage = () => {
             console.warn('lodo maro')
         }
 
-        await axios.post('http://api:3000/expense/', {
+        await axios.post(`${api}:3000/expense/`, {
             expenseName: expenseName,
             expenseAmount: expenseAmount,
             budgetId: expenseId
@@ -170,7 +170,7 @@ const BudgetPage = () => {
     }
 
     const removeExpense = async (expenseId) => {
-        await axios.delete('http://api:3000/expense/', {
+        await axios.delete(`${api}:3000/expense/`, {
             expenseId: expenseId
         })
         .then(response => {

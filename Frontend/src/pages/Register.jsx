@@ -21,7 +21,7 @@ const Register = () => {
         console.log(`Data Recorded:\nUsername: ${username}\nEmail: ${email}\nPassword: ${password}`);
 
         try {
-            const response = await axios.post('http://api:3000/user/signup', {
+            const response = await axios.post(`${api}:3000/user/signup`, {
                 name: username,
                 email: email,
                 password: password
