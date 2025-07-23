@@ -21,23 +21,37 @@ pipeline {
             }
         }
 
-        stage('Backend') {
+        stage('Building containers') {
             steps {
-                echo 'Bringing up Backend'
+                echo 'Building containers'
                 dir('Backend') {
                     sh 'docker build -t backend:latest .'
-                    sh 'docker run -d --name backend --net=host backend:latest'
+                }
+
+                dir('Frontend') {
+                    sh 'docker build -t frontend:latest .'
                 }
             }
         }
 
-        stage('Frontend') {
+        stage('Running Containers'){
             steps {
-                echo 'Bringing up Frontend'
-                dir('Frontend') {
-                    sh 'docker build -t frontend:latest .'
+                echo 'Building containers'
+                dir('Backend'){
+                    sh 'docker run -d --name backend --net=host backend:latest'
+                }
+                dir('Frontend'){
                     sh 'docker run -d --name frontend -e VITE_API_URL="http://192.168.1.16:3000" --net=host frontend:latest'
                 }
+            }
+        }
+
+        stage('Health') {
+            steps {
+                echo "Post Deployment Heath Checks"
+                curl "http://192.168.1.16"
+                curl "http://192.168.1.16:3000"
+                curl "http://192.168.1.16:27017"
             }
         }
         
