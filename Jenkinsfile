@@ -49,9 +49,9 @@ pipeline {
         stage('Health') {
             steps {
                 echo "Post Deployment Heath Checks"
-                curl "http://192.168.1.16"
-                curl "http://192.168.1.16:3000"
-                curl "http://192.168.1.16:27017"
+                sh 'curl "http://192.168.1.16"'
+                sh 'curl "http://192.168.1.16:3000"'
+                sh 'curl "http://192.168.1.16:27017"'
             }
         }
         
