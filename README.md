@@ -19,3 +19,12 @@ Stage 5: Deploy Containers
 Stage 6: Post Deployment Checks
 
 The `Dockerfile`, `Jenkinsfile`, `docker-compose.yml` is provided in the source code.
+
+---
+### Images 
+
+![pipeline](./screenshots/pipeline.png)
+![portainer](./screenshots/portainer.png)
+![webpage](./screenshots/webpage.png)
+
+
